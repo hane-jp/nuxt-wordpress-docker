@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - db-data:/var/lib/mysql
+    restart: unless-stopped
+
+  wordpress:
+    image: wordpress:php8.2-apache
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+    ports:
+      - "8080:80"
+    volumes:
+      - ./wp:/var/www/html
+      - ./docker/php.ini:/usr/local/etc/php/conf.d/z-custom.ini
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  nuxt:
+    image: node:20-alpine
+    working_dir: /app
+    command: sh -c "npm i && npm run dev"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./nuxt:/app
+    environment:
+      NUXT_PUBLIC_WP_API_BASE: ${NUXT_PUBLIC_WP_API_BASE}
+    depends_on:
+      - wordpress
+
+volumes:
+  db-data:
