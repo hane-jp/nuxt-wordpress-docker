@@ -7,11 +7,10 @@
 
 ---
 
-## 📖 Table of Contents
-
+- [✨ Features](#-features)
 - [🎯 What You Can Build](#-what-you-can-build)
-- [�‍💻 Who This Is For](#-who-this-is-for)
-- [�🛠 Prerequisites](#-prerequisites)
+- [👨‍💻 Who This Is For](#-who-this-is-for)
+- [🛠 Prerequisites](#-prerequisites)
 - [🚀 Quick Start](#-quick-start)
 - [📁 Project Structure](#-project-structure)
 - [⚙️ Configuration](#️-configuration)
@@ -20,6 +19,16 @@
 - [❓ FAQ & Troubleshooting](#-faq--troubleshooting)
 - [🤝 Contributing](#-contributing)
 - [🇯🇵 日本語版](#-日本語版)
+
+---
+
+## ✨ Features
+
+- **Nuxt 3 frontend** ready for modern UI development
+- **WordPress REST API backend** for content management
+- **Docker-based local environment** for consistent setup
+- **Headless CMS architecture** for flexible frontend implementation
+- **Beginner-friendly documentation** for quick onboarding
 
 ---
 
@@ -48,7 +57,7 @@
 
 ---
 
-## �‍💻 Who This Is For
+## 👨‍💻 Who This Is For
 
 ### ✅ Perfect For
 
@@ -94,10 +103,10 @@ Please ensure you have the following tools installed:
 | **Node.js** | v18+ (v20+ recommended) | Nuxt development | [Official Site](https://nodejs.org/) |
 | **npm** | v9+ (comes with Node.js) | Package management | Included with Node.js |
 | **Git** | v2.30+ | Version control | [Official Site](https://git-scm.com/) |
-> 💡 **Package Manager**: This project supports both **npm** and **yarn**. Choose your preferred one:
+> 💡 **Package Manager**: This project uses **npm inside Docker**.
 > 
-> - **npm**: Standard Node.js package manager (recommended for beginners)
-> - **yarn**: Fast package manager with advanced features (v1.22+ or v4.0+)
+> - **npm**: Recommended default workflow
+> - **yarn**: Optional only if you want to manage packages locally outside Docker
 >
 > Version requirements are specified in `.nvmrc` (Node.js) and `package.json` (engines).
 ### 🎯 IDE & Extensions (Recommended)
@@ -130,10 +139,10 @@ docker compose version
 
 # Check Node.js & package manager
 node --version
+npm --version
 
-# Choose your package manager
-npm --version          # if using npm
-yarn --version         # if using yarn
+# Optional: check yarn only if you use it locally
+yarn --version
 
 # Check Git
 git --version
@@ -153,7 +162,7 @@ lsof -i :8080  # Should return nothing
 ### 1️⃣ Clone Repository
 
 ```bash
-git clone https://github.com/your-username/nuxt-wordpress-docker.git
+git clone https://github.com/hane-jp/nuxt-wordpress-docker.git
 cd nuxt-wordpress-docker
 ```
 
@@ -167,24 +176,11 @@ cp .env.example .env
 
 ### 3️⃣ Start with Docker
 
-**Using npm:**
 ```bash
 docker compose up -d
 ```
 
-**Using yarn:**
-```bash
-# First time setup
-yarn install  # in root directory
-docker compose up -d
-```
-
-> 💡 **Package Manager**: Both commands work the same way. The Nuxt container will automatically install dependencies using npm inside Docker.
-
-> ⏳ **First startup takes time** (5-10 minutes)
-> - WordPress download
-> - Database initialization  
-> - Nuxt dependency installation
+> 💡 **Package Manager**: The default workflow uses npm inside Docker. You only need yarn if you want to manage packages locally outside the container.
 
 ### 4️⃣ Verify Setup
 
@@ -295,9 +291,9 @@ docker compose logs -f
 # Restart only Nuxt
 docker compose restart nuxt
 
-# Install new packages (choose one)
-npm install <package>     # if using npm
-yarn add <package>        # if using yarn
+# Install new packages locally only when needed
+npm install <package>     # recommended local workflow
+yarn add <package>        # optional local workflow
 ```
 
 ---
@@ -364,7 +360,7 @@ npm install
 #### ✅ Features
 - **Docker Compose** setup for Nuxt 3 + WordPress + MySQL
 - **Production-ready** configuration with proper environment management
-- **Dual package manager** support (npm & yarn)
+- **Docker-first development workflow** with npm-based container setup
 - **Comprehensive documentation** with beginner-friendly setup guide
 - **Security-first** approach with proper `.gitignore` and environment variables
 
@@ -416,9 +412,10 @@ Made with ❤️ for WordPress & Nuxt developers
 
 ---
 
-## 📖 目次
-
-- [🎯 この構成でできること](#-この構成でできること)- [👨‍💻 対象者](#-対象者)- [🛠 必要な環境](#-必要な環境)
+- [✨ 特徴](#-特徴)
+- [🎯 この構成でできること](#-この構成でできること)
+- [👨‍💻 対象者](#-対象者)
+- [🛠 必要な環境](#-必要な環境)
 - [🚀 クイックスタート](#-クイックスタート)
 - [📁 ディレクトリ構成](#-ディレクトリ構成)
 - [⚙️ 設定について](#️-設定について) 
@@ -426,6 +423,16 @@ Made with ❤️ for WordPress & Nuxt developers
 - [🛠 開発フロー](#-開発フロー)
 - [❓ よくある質問・トラブル](#-よくある質問トラブル)
 - [🤝 コントリビュート](#-コントリビュート)
+
+---
+
+## ✨ 特徴
+
+- **Nuxt 3 フロントエンド** ですぐにUI開発を始められます
+- **WordPress REST API バックエンド** でコンテンツ管理ができます
+- **Docker ベースのローカル環境** でセットアップ差異を減らせます
+- **ヘッドレス CMS 構成** で柔軟にフロントエンドを実装できます
+- **初学者にも追いやすいドキュメント** を用意しています
 
 ---
 
@@ -454,7 +461,7 @@ Made with ❤️ for WordPress & Nuxt developers
 
 ---
 
-## �‍💻 対象者
+## 👨‍💻 対象者
 
 ### ✅ 適している方
 
@@ -500,10 +507,10 @@ Made with ❤️ for WordPress & Nuxt developers
 | **Node.js** | v18以上（v20以上推奨） | Nuxt開発環境 | [公式サイト](https://nodejs.org/) |
 | **npm** | v9以上（Node.jsに含まれる） | パッケージ管理 | Node.jsに含まれる |
 | **Git** | v2.30以上 | バージョン管理 | [公式サイト](https://git-scm.com/) |
-> 💡 **パッケージマネージャー**: このプロジェクトは **npm** と **yarn** の両方に対応しています。お好みで選択してください：
+> 💡 **パッケージマネージャー**: このプロジェクトは **Docker 内で npm を使用** します。
 > 
-> - **npm**: Node.js標準パッケージマネージャー（初学者に推奨）
-> - **yarn**: 高速で高機能なパッケージマネージャー（v1.22+またはv4.0+）
+> - **npm**: 推奨の標準ワークフロー
+> - **yarn**: Docker の外でローカル管理したい場合のみ任意で使用
 >
 > バージョン要件は `.nvmrc` (Node.js) と `package.json` (engines) に指定されています。
 ### 🎯 IDE・拡張機能（推奨）
@@ -536,10 +543,10 @@ docker compose version
 
 # Node.js & パッケージマネージャー確認
 node --version
+npm --version
 
-# お使いのパッケージマネージャーを選択
-npm --version          # npmを使用する場合
-yarn --version         # yarnを使用する場合
+# yarnはローカルで使う場合のみ確認
+yarn --version
 
 # Git確認
 git --version
@@ -559,7 +566,7 @@ lsof -i :8080  # 何も返されなければOK
 ### 1️⃣ リポジトリをクローン
 
 ```bash
-git clone https://github.com/your-username/nuxt-wordpress-docker.git
+git clone https://github.com/hane-jp/nuxt-wordpress-docker.git
 cd nuxt-wordpress-docker
 ```
 
@@ -573,24 +580,11 @@ cp .env.example .env
 
 ### 3️⃣ Docker で環境を起動
 
-**npm を使用する場合:**
 ```bash
 docker compose up -d
 ```
 
-**yarn を使用する場合:**
-```bash
-# 初回セットアップ
-yarn install  # ルートディレクトリで実行
-docker compose up -d
-```
-
-> 💡 **パッケージマネージャー**: どちらのコマンドでも同様に動作します。Nuxtコンテナ内で自動的にnpmを使用して依存関係をインストールします。
-
-> ⏳ **初回は少し時間がかかります**（5-10分程度）
-> - WordPressのダウンロード
-> - データベースの初期化  
-> - Nuxtの依存関係インストール
+> 💡 **パッケージマネージャー**: 標準ワークフローでは Docker 内で npm を使います。yarn が必要なのはコンテナ外でローカル管理したい場合だけです。
 
 ### 4️⃣ 起動確認
 
@@ -701,9 +695,9 @@ docker compose logs -f
 # Nuxtのみ再起動
 docker compose restart nuxt
 
-# 新しいパッケージのインストール（いずれか選択）
-npm install <パッケージ名>     # npmを使用する場合
-yarn add <パッケージ名>        # yarnを使用する場合
+# 新しいパッケージのインストール（ローカルで必要な場合のみ）
+npm install <パッケージ名>     # 推奨のローカル運用
+yarn add <パッケージ名>        # 任意のローカル運用
 ```
 
 ---
@@ -770,7 +764,7 @@ npm install
 #### ✅ 機能
 - **Docker Compose** による Nuxt 3 + WordPress + MySQL 環境構築
 - **本番対応** の適切な環境変数管理
-- **デュアルパッケージマネージャー** 対応（npm & yarn）
+- **Dockerファーストの開発フロー** と npm ベースのコンテナ構成
 - **包括的なドキュメント** と詳細なセットアップガイド
 - **セキュリティ重視** の `.gitignore` と環境変数設定
 

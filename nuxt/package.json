@@ -1,12 +1,17 @@
 {
   "name": "nuxt-wp-app",
   "private": true,
+  "packageManager": "npm@10",
   "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
-    "dev": "nuxt dev --port 3000 --host 0.0.0.0",
+    "dev": "nuxt dev --host 0.0.0.0 --port 3000",
     "build": "nuxt build",
-    "preview": "nuxt preview -p 3000",
-    "generate": "nuxt generate"
+    "preview": "nuxt preview --host 0.0.0.0 --port 3000",
+    "generate": "nuxt generate",
+    "postinstall": "nuxt prepare"
   },
   "dependencies": {
     "nuxt": "^3.12.0",

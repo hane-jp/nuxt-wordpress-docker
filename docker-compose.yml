@@ -3,6 +3,7 @@ version: "3.9"
 services:
   db:
     image: mysql:8.0
+    container_name: nuxt-wp-db
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -12,9 +13,16 @@ services:
     volumes:
       - db-data:/var/lib/mysql
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
 
   wordpress:
     image: wordpress:php8.2-apache
+    container_name: nuxt-wp-wordpress
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: ${MYSQL_USER}
@@ -26,21 +34,39 @@ services:
       - ./wp:/var/www/html
       - ./docker/php.ini:/usr/local/etc/php/conf.d/z-custom.ini
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "php", "-r", "exit(@fsockopen('127.0.0.1', 80) ? 0 : 1);"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
 
   nuxt:
     image: node:20-alpine
+    container_name: nuxt-wp-nuxt
     working_dir: /app
-    command: sh -c "npm i && npm run dev"
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
     ports:
       - "3000:3000"
     volumes:
       - ./nuxt:/app
+      - nuxt-node-modules:/app/node_modules
     environment:
       NUXT_PUBLIC_WP_API_BASE: ${NUXT_PUBLIC_WP_API_BASE}
     depends_on:
-      - wordpress
+      wordpress:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:3000"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
 volumes:
   db-data:
+  nuxt-node-modules:
