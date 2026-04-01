@@ -3,10 +3,10 @@
 
 > A production-ready starter template for integrating **Nuxt 3 (Frontend)** and **WordPress (CMS/API)** using Docker.
 
-![Nuxt + WordPress + Docker](https://img.shields.io/badge/Nuxt%203-00DC82?style=for-the-badge&logo=nuxt.js&logoColor=white) ![WordPress](https://img.shields.io/badge/WordPress-21759B?style=for-the-badge&logo=wordpress&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
 ---
 
+- [🖼 Screenshot](#-screenshot)
 - [✨ Features](#-features)
 - [🎯 What You Can Build](#-what-you-can-build)
 - [👨‍💻 Who This Is For](#-who-this-is-for)
@@ -19,6 +19,12 @@
 - [❓ FAQ & Troubleshooting](#-faq--troubleshooting)
 - [🤝 Contributing](#-contributing)
 - [🇯🇵 日本語版](#-日本語版)
+
+---
+
+## 🖼 Screenshot
+
+![Nuxt + WordPress + Docker Starter Screenshot](docs/screenshot.png)
 
 ---
 
@@ -221,6 +227,8 @@ If you can access these URLs, you're successful:
 └── 📂 db-data/              # MySQL data (auto-generated)
 ```
 
+If you customize the frontend entry page, place it in `nuxt/pages/index.vue`.
+
 > 💡 **Note**: `wp/` and `db-data/` are auto-created by Docker and excluded from Git.
 
 ---
@@ -412,6 +420,7 @@ Made with ❤️ for WordPress & Nuxt developers
 
 ---
 
+- [🖼 スクリーンショット](#-スクリーンショット)
 - [✨ 特徴](#-特徴)
 - [🎯 この構成でできること](#-この構成でできること)
 - [👨‍💻 対象者](#-対象者)
@@ -423,6 +432,12 @@ Made with ❤️ for WordPress & Nuxt developers
 - [🛠 開発フロー](#-開発フロー)
 - [❓ よくある質問・トラブル](#-よくある質問トラブル)
 - [🤝 コントリビュート](#-コントリビュート)
+
+---
+
+## 🖼 スクリーンショット
+
+![Nuxt + WordPress + Docker Starter Screenshot](docs/screenshot.png)
 
 ---
 
@@ -624,6 +639,8 @@ docker compose up -d
 │
 └── 📂 db-data/              # MySQL データ （自動生成）
 ```
+
+フロントのトップページをカスタマイズする場合は `nuxt/pages/index.vue` に配置してください。
 
 > 💡 **ポイント**：`wp/` と `db-data/` は Docker が自動作成するので、Git には含まれません。
 
