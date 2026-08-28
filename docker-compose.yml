@@ -1,10 +1,9 @@
-version: "3.9"
-
 services:
   db:
-    image: mysql:8.0
+    image: mysql:8.4
     container_name: nuxt-wp-db
-    command: --default-authentication-plugin=mysql_native_password
+    # Required when upgrading an existing 8.0 volume whose users still use this plugin.
+    command: --mysql-native-password=ON
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
@@ -21,7 +20,7 @@ services:
       start_period: 20s
 
   wordpress:
-    image: wordpress:php8.2-apache
+    image: wordpress:7-php8.3-apache
     container_name: nuxt-wp-wordpress
     environment:
       WORDPRESS_DB_HOST: db
@@ -45,23 +44,24 @@ services:
       start_period: 20s
 
   nuxt:
-    image: node:20-alpine
+    image: node:24-alpine
     container_name: nuxt-wp-nuxt
     working_dir: /app
-    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    command: sh -c "npm ci && npm run dev"
     ports:
       - "3000:3000"
     volumes:
       - ./nuxt:/app
       - nuxt-node-modules:/app/node_modules
     environment:
+      NUXT_WP_API_BASE: http://wordpress/wp-json
       NUXT_PUBLIC_WP_API_BASE: ${NUXT_PUBLIC_WP_API_BASE}
     depends_on:
       wordpress:
         condition: service_healthy
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:3000"]
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:3000"]
       interval: 15s
       timeout: 5s
       retries: 10

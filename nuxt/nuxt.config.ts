@@ -2,10 +2,11 @@ export default defineNuxtConfig({
   css: ['@/assets/scss/main.scss'],
 
   devtools: {
-    enabled: true
+    enabled: process.env.NODE_ENV === 'development'
   },
 
   runtimeConfig: {
+    wpApiBase: process.env.NUXT_WP_API_BASE || 'http://localhost:8080/wp-json',
     public: {
       wpApiBase: process.env.NUXT_PUBLIC_WP_API_BASE || 'http://localhost:8080/wp-json'
     }
@@ -15,7 +16,5 @@ export default defineNuxtConfig({
     strict: true
   },
 
-  nitro: {
-    compatibilityDate: '2024-04-03'
-  }
+  compatibilityDate: '2026-08-28'
 })

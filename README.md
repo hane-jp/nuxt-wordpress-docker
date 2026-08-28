@@ -1,7 +1,7 @@
 
 # 🚀 Nuxt ✕ WordPress Development Starter
 
-> A production-ready starter template for integrating **Nuxt 3 (Frontend)** and **WordPress (CMS/API)** using Docker.
+> A production-ready starter template for integrating **Nuxt 4 (Frontend)** and **WordPress (CMS/API)** using Docker.
 
 
 ---
@@ -30,7 +30,7 @@
 
 ## ✨ Features
 
-- **Nuxt 3 frontend** ready for modern UI development
+- **Nuxt 4 frontend** ready for modern UI development
 - **WordPress REST API backend** for content management
 - **Docker-based local environment** for consistent setup
 - **Headless CMS architecture** for flexible frontend implementation
@@ -43,7 +43,7 @@
 ### 💡 Why Nuxt + WordPress?
 
 - **WordPress** → Content management (posts, media, metadata) + REST API
-- **Nuxt 3** → Modern frontend (SSR/SSG, fast, SEO-optimized)
+- **Nuxt 4** → Modern frontend (SSR/SSG, fast, SEO-optimized)
 - **Docker** → Consistent environment for teams and production deployment
 
 ### 🎯 Capabilities
@@ -83,7 +83,7 @@
 ### 🚀 New to These Technologies?
 
 - **Docker**: [Docker Getting Started Guide](https://docs.docker.com/get-started/)
-- **Nuxt 3**: [Nuxt Documentation](https://nuxt.com/docs/getting-started/introduction)
+- **Nuxt 4**: [Nuxt Documentation](https://nuxt.com/docs/getting-started/introduction)
 - **WordPress REST API**: [REST API Handbook](https://developer.wordpress.org/rest-api/)
 
 ---
@@ -106,13 +106,12 @@ Please ensure you have the following tools installed:
 | Tool | Version | Purpose | Installation |
 |------|---------|---------|--------------|
 | **Docker Desktop** | v4.0+ | Container runtime | [Official Site](https://www.docker.com/products/docker-desktop/) |
-| **Node.js** | v18+ (v20+ recommended) | Nuxt development | [Official Site](https://nodejs.org/) |
-| **npm** | v9+ (comes with Node.js) | Package management | Included with Node.js |
+| **Node.js** | v24 LTS | Nuxt development | [Official Site](https://nodejs.org/) |
+| **npm** | v11+ (comes with Node.js) | Package management | Included with Node.js |
 | **Git** | v2.30+ | Version control | [Official Site](https://git-scm.com/) |
 > 💡 **Package Manager**: This project uses **npm inside Docker**.
 > 
-> - **npm**: Recommended default workflow
-> - **yarn**: Optional only if you want to manage packages locally outside Docker
+> - **npm**: The only supported package manager; use the committed `nuxt/package-lock.json`
 >
 > Version requirements are specified in `.nvmrc` (Node.js) and `package.json` (engines).
 ### 🎯 IDE & Extensions (Recommended)
@@ -146,9 +145,6 @@ docker compose version
 # Check Node.js & package manager
 node --version
 npm --version
-
-# Optional: check yarn only if you use it locally
-yarn --version
 
 # Check Git
 git --version
@@ -186,7 +182,7 @@ cp .env.example .env
 docker compose up -d
 ```
 
-> 💡 **Package Manager**: The default workflow uses npm inside Docker. You only need yarn if you want to manage packages locally outside the container.
+> 💡 **Package Manager**: The container runs `npm ci` against the committed lockfile for reproducible installs.
 
 ### 4️⃣ Verify Setup
 
@@ -214,22 +210,24 @@ If you can access these URLs, you're successful:
 ├── 📄 .env.example          # Environment variables template
 ├── 📄 .env                  # Environment variables (create this!)
 │
-├── 📂 nuxt/                 # Nuxt 3 frontend
-│   ├── 📄 app.vue          # Main app file
+├── 📂 nuxt/                 # Nuxt 4 frontend
+│   ├── 📂 app/             # Nuxt 4 application directory
+│   │   ├── 📄 app.vue      # Main app file
+│   │   └── 📂 pages/       # Page files
 │   ├── 📄 nuxt.config.ts   # Nuxt configuration
 │   ├── 📄 package.json     # Nuxt dependencies
-│   └── 📂 pages/           # Page files
+│   └── 📄 package-lock.json # Reproducible npm dependency lock
 │
 ├── 📂 wp/                   # WordPress (auto-generated)
 │   ├── 📄 wp-config.php    # WordPress configuration
 │   └── ...                 # WordPress files
 │
-└── 📂 db-data/              # MySQL data (auto-generated)
+└── Docker volume: db-data   # MySQL data (auto-generated)
 ```
 
-If you customize the frontend entry page, place it in `nuxt/pages/index.vue`.
+If you customize the frontend entry page, place it in `nuxt/app/pages/index.vue`.
 
-> 💡 **Note**: `wp/` and `db-data/` are auto-created by Docker and excluded from Git.
+> 💡 **Note**: `wp/` is created locally and `db-data` is a Docker named volume. Back up the database before upgrading an existing environment from MySQL 8.0 to 8.4. The Compose configuration temporarily enables `mysql_native_password` so existing 8.0 users can still connect; migrate those users to `caching_sha2_password` before removing that option.
 
 ---
 
@@ -253,6 +251,19 @@ NUXT_PUBLIC_WP_API_BASE=http://localhost:8080/wp-json
 ---
 
 ## 🔗 How Integration Works
+
+### Included sample pages
+
+| Route | Purpose |
+|-------|---------|
+| `/` | Starter guide, API connection status, and latest posts |
+| `/guide` | Setup, publishing, customization, commands, and troubleshooting guide |
+| `/guide/en` | English version of the user guide |
+| `/posts` | WordPress post list with loading, empty, and error states |
+| `/posts/[slug]` | Post detail with featured image and sanitized HTML content |
+
+Nuxt proxies requests through its server API (`/api/posts`) to avoid browser CORS issues and to use the Docker-internal WordPress hostname during SSR. The UI remains usable before WordPress is initialized.
+Both pretty REST URLs and WordPress's default plain-permalink REST URL are supported automatically.
 
 ### WordPress → Nuxt Data Retrieval
 
@@ -300,8 +311,10 @@ docker compose logs -f
 docker compose restart nuxt
 
 # Install new packages locally only when needed
-npm install <package>     # recommended local workflow
-yarn add <package>        # optional local workflow
+npm --prefix nuxt install <package>     # recommended local workflow
+
+# Run unit tests
+npm test
 ```
 
 ---
@@ -328,10 +341,10 @@ lsof -i :3000
 **Cause**: Node.js dependency issues
 **Solution**:
 ```bash
-# Enter Nuxt container and reinstall
-docker compose exec nuxt sh
-rm -rf node_modules package-lock.json
-npm install
+# Recreate the dependency volume and start from the committed lockfile
+docker compose down
+docker volume rm nuxt-wordpress-docker_nuxt-node-modules
+docker compose up -d
 ```
 </details>
 
@@ -357,16 +370,23 @@ npm install
 
 - Report issues via [Issues](../../issues)
 - [WordPress REST API Documentation](https://developer.wordpress.org/rest-api/)
-- [Nuxt 3 Documentation](https://nuxt.com/)
+- [Nuxt 4 Documentation](https://nuxt.com/)
 
 ---
 
 ## 📋 Version History
 
+### [v1.1.0] - 2026-08-28
+
+- Updated Nuxt 3 to Nuxt 4.5 and adopted the `app/` directory structure
+- Updated Node.js 20 to Node.js 24 LTS and MySQL 8.0 to MySQL 8.4 LTS
+- Updated WordPress runtime to PHP 8.3
+- Standardized package management on npm with reproducible `npm ci` installs
+
 ### [v1.0.0] - 2026-03-14 (Initial Release)
 
 #### ✅ Features
-- **Docker Compose** setup for Nuxt 3 + WordPress + MySQL
+- **Docker Compose** setup for Nuxt 4 + WordPress + MySQL
 - **Production-ready** configuration with proper environment management
 - **Docker-first development workflow** with npm-based container setup
 - **Comprehensive documentation** with beginner-friendly setup guide
@@ -416,7 +436,7 @@ Made with ❤️ for WordPress & Nuxt developers
 
 ## 🚀 Nuxt ✕ WordPress 開発環境スターター
 
-> Docker を使って **Nuxt 3（フロントエンド）** と **WordPress（CMS/API）** を連携できる本番対応のスターターテンプレートです。
+> Docker を使って **Nuxt 4（フロントエンド）** と **WordPress（CMS/API）** を連携できる本番対応のスターターテンプレートです。
 
 ---
 
@@ -443,7 +463,7 @@ Made with ❤️ for WordPress & Nuxt developers
 
 ## ✨ 特徴
 
-- **Nuxt 3 フロントエンド** ですぐにUI開発を始められます
+- **Nuxt 4 フロントエンド** ですぐにUI開発を始められます
 - **WordPress REST API バックエンド** でコンテンツ管理ができます
 - **Docker ベースのローカル環境** でセットアップ差異を減らせます
 - **ヘッドレス CMS 構成** で柔軟にフロントエンドを実装できます
@@ -456,7 +476,7 @@ Made with ❤️ for WordPress & Nuxt developers
 ### 💡 なぜ Nuxt + WordPress なの？
 
 - **WordPress** → コンテンツ管理（記事・画像・メタデータ）+ REST API
-- **Nuxt 3** → モダンなフロントエンド（SSR/SSG、高速、SEO最適化）
+- **Nuxt 4** → モダンなフロントエンド（SSR/SSG、高速、SEO最適化）
 - **Docker** → 環境を統一し、チーム開発や本番移行を簡単に
 
 ### 🎯 できること
@@ -496,7 +516,7 @@ Made with ❤️ for WordPress & Nuxt developers
 ### 🚀 これらの技術が初めての場合
 
 - **Docker**: [Docker入門ガイド](https://docs.docker.com/get-started/)
-- **Nuxt 3**: [Nuxt公式ドキュメント](https://nuxt.com/docs/getting-started/introduction)
+- **Nuxt 4**: [Nuxt公式ドキュメント](https://nuxt.com/docs/getting-started/introduction)
 - **WordPress REST API**: [REST APIハンドブック](https://developer.wordpress.org/rest-api/)
 
 ---
@@ -519,13 +539,12 @@ Made with ❤️ for WordPress & Nuxt developers
 | ツール | バージョン | 用途 | インストール |
 |--------|------------|------|--------------|
 | **Docker Desktop** | v4.0以上 | コンテナ実行環境 | [公式サイト](https://www.docker.com/products/docker-desktop/) |
-| **Node.js** | v18以上（v20以上推奨） | Nuxt開発環境 | [公式サイト](https://nodejs.org/) |
-| **npm** | v9以上（Node.jsに含まれる） | パッケージ管理 | Node.jsに含まれる |
+| **Node.js** | v24 LTS | Nuxt開発環境 | [公式サイト](https://nodejs.org/) |
+| **npm** | v11以上（Node.jsに含まれる） | パッケージ管理 | Node.jsに含まれる |
 | **Git** | v2.30以上 | バージョン管理 | [公式サイト](https://git-scm.com/) |
 > 💡 **パッケージマネージャー**: このプロジェクトは **Docker 内で npm を使用** します。
 > 
-> - **npm**: 推奨の標準ワークフロー
-> - **yarn**: Docker の外でローカル管理したい場合のみ任意で使用
+> - **npm**: 唯一の対応パッケージマネージャー。コミット済みの `nuxt/package-lock.json` を使用
 >
 > バージョン要件は `.nvmrc` (Node.js) と `package.json` (engines) に指定されています。
 ### 🎯 IDE・拡張機能（推奨）
@@ -559,9 +578,6 @@ docker compose version
 # Node.js & パッケージマネージャー確認
 node --version
 npm --version
-
-# yarnはローカルで使う場合のみ確認
-yarn --version
 
 # Git確認
 git --version
@@ -599,7 +615,7 @@ cp .env.example .env
 docker compose up -d
 ```
 
-> 💡 **パッケージマネージャー**: 標準ワークフローでは Docker 内で npm を使います。yarn が必要なのはコンテナ外でローカル管理したい場合だけです。
+> 💡 **パッケージマネージャー**: コンテナはコミット済みロックファイルに対して `npm ci` を実行します。
 
 ### 4️⃣ 起動確認
 
@@ -627,22 +643,24 @@ docker compose up -d
 ├── 📄 .env.example          # 環境変数のサンプル
 ├── 📄 .env                  # 環境変数（作成してね！）
 │
-├── 📂 nuxt/                 # Nuxt 3 フロントエンド
-│   ├── 📄 app.vue          # メインアプリファイル
+├── 📂 nuxt/                 # Nuxt 4 フロントエンド
+│   ├── 📂 app/             # Nuxt 4 アプリケーションディレクトリ
+│   │   ├── 📄 app.vue      # メインアプリファイル
+│   │   └── 📂 pages/       # ページファイル
 │   ├── 📄 nuxt.config.ts   # Nuxt設定
 │   ├── 📄 package.json     # Nuxt依存関係
-│   └── 📂 pages/           # ページファイル
+│   └── 📄 package-lock.json # npm依存関係の固定ファイル
 │
 ├── 📂 wp/                   # WordPress （自動生成）
 │   ├── 📄 wp-config.php    # WordPress設定
 │   └── ...                 # WordPressのファイル群
 │
-└── 📂 db-data/              # MySQL データ （自動生成）
+└── Docker volume: db-data   # MySQL データ（自動生成）
 ```
 
-フロントのトップページをカスタマイズする場合は `nuxt/pages/index.vue` に配置してください。
+フロントのトップページをカスタマイズする場合は `nuxt/app/pages/index.vue` に配置してください。
 
-> 💡 **ポイント**：`wp/` と `db-data/` は Docker が自動作成するので、Git には含まれません。
+> 💡 **ポイント**：`wp/` はローカルに作成され、`db-data` は Docker の名前付きボリュームです。既存環境を MySQL 8.0 から 8.4 へ更新する前に、必ずデータベースをバックアップしてください。Compose では既存の 8.0 ユーザーが接続できるよう `mysql_native_password` を一時的に有効化しています。ユーザーを `caching_sha2_password` へ移行してから、このオプションを削除してください。
 
 ---
 
@@ -666,6 +684,19 @@ NUXT_PUBLIC_WP_API_BASE=http://localhost:8080/wp-json
 ---
 
 ## 🔗 連携の仕組み
+
+### サンプルページ
+
+| ルート | 内容 |
+|--------|------|
+| `/` | セットアップ案内、API接続状態、最新投稿 |
+| `/guide` | セットアップ、投稿、カスタマイズ、コマンド、トラブル対応のガイド |
+| `/guide/en` | 使い方ガイドの英語版 |
+| `/posts` | ローディング・0件・エラー状態を備えた投稿一覧 |
+| `/posts/[slug]` | アイキャッチ画像とサニタイズ済み本文を表示する投稿詳細 |
+
+NuxtサーバーのAPI（`/api/posts`）を経由することで、ブラウザのCORS問題を避け、SSR時にはDocker内部のWordPressホスト名を利用します。WordPressの初期設定前でも画面は安全に表示されます。
+通常のREST URLと、WordPressの初期パーマリンク状態で使われるクエリ形式のREST URLの両方へ自動対応します。
 
 ### WordPress → Nuxt へのデータ取得
 
@@ -713,8 +744,10 @@ docker compose logs -f
 docker compose restart nuxt
 
 # 新しいパッケージのインストール（ローカルで必要な場合のみ）
-npm install <パッケージ名>     # 推奨のローカル運用
-yarn add <パッケージ名>        # 任意のローカル運用
+npm --prefix nuxt install <パッケージ名>     # 推奨のローカル運用
+
+# ユニットテスト
+npm test
 ```
 
 ---
@@ -741,10 +774,10 @@ lsof -i :3000
 **原因**：Node.jsの依存関係の問題
 **解決法**：
 ```bash
-# Nuxtコンテナに入って再インストール
-docker compose exec nuxt sh
-rm -rf node_modules package-lock.json
-npm install
+# 依存関係ボリュームを作り直し、コミット済みロックファイルから起動
+docker compose down
+docker volume rm nuxt-wordpress-docker_nuxt-node-modules
+docker compose up -d
 ```
 </details>
 
@@ -770,16 +803,23 @@ npm install
 
 - [Issues](../../issues) で質問・バグ報告
 - [WordPress REST API 公式ドキュメント](https://developer.wordpress.org/rest-api/)
-- [Nuxt 3 公式ドキュメント](https://nuxt.com/)
+- [Nuxt 4 公式ドキュメント](https://nuxt.com/)
 
 ---
 
 ## 📋 バージョン履歴
 
+### [v1.1.0] - 2026-08-28
+
+- Nuxt 3 から Nuxt 4.5 へ更新し、`app/` ディレクトリ構成へ移行
+- Node.js 20 から Node.js 24 LTS、MySQL 8.0 から MySQL 8.4 LTS へ更新
+- WordPress 実行環境を PHP 8.3 へ更新
+- npm に統一し、`npm ci` による再現可能なインストールへ変更
+
 ### [v1.0.0] - 2026-03-14 (初期リリース)
 
 #### ✅ 機能
-- **Docker Compose** による Nuxt 3 + WordPress + MySQL 環境構築
+- **Docker Compose** による Nuxt 4 + WordPress + MySQL 環境構築
 - **本番対応** の適切な環境変数管理
 - **Dockerファーストの開発フロー** と npm ベースのコンテナ構成
 - **包括的なドキュメント** と詳細なセットアップガイド

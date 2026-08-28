@@ -36,6 +36,6 @@ db-data/
 *.tar
 
 # =========================
-# WordPress runtime data
+# WordPress runtime data (core, configuration, themes, plugins, and uploads)
 # =========================
-wp/wp-content/uploads/
+wp/
