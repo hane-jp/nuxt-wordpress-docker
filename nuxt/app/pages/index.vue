@@ -16,7 +16,7 @@ useSeoMeta({
       <div class="shell hero__grid">
         <div>
           <p class="eyebrow">Nuxt 4 × WordPress × Docker</p>
-          <h1>ヘッドレスCMSを、<br>すぐ試せるスターター。</h1>
+          <h1><span>ヘッドレスCMSを、</span><span>すぐ試せるスターター。</span></h1>
           <p class="lead">WordPressで投稿を管理し、Nuxtで高速に表示する最小構成です。下のサンプル投稿でREST API連携を確認できます。</p>
           <div class="actions">
             <NuxtLink to="/posts" class="button">投稿サンプルを見る</NuxtLink>
