@@ -5,6 +5,7 @@
 
 > A production-ready starter template for integrating **Nuxt 4 (Frontend)** and **WordPress (CMS/API)** using Docker.
 
+> **New to Docker or GitHub?** Start with the [Japanese beginner manual](docs/README.md). A GitHub account and Git are not required for the ZIP-based trial setup.
 
 ---
 
@@ -103,14 +104,14 @@ Please ensure you have the following tools installed:
 | **Disk Space** | 5GB free | 10GB+ |
 | **Internet** | Required for Docker images | Stable connection |
 
-### 🔧 Required Tools
+### 🔧 Tools
 
 | Tool | Version | Purpose | Installation |
 |------|---------|---------|--------------|
 | **Docker Desktop** | v4.0+ | Container runtime | [Official Site](https://www.docker.com/products/docker-desktop/) |
-| **Node.js** | v24 LTS | Nuxt development | [Official Site](https://nodejs.org/) |
-| **npm** | v11+ (comes with Node.js) | Package management | Included with Node.js |
-| **Git** | v2.30+ | Version control | [Official Site](https://git-scm.com/) |
+| **Node.js** | v24 LTS | Optional: run Nuxt outside Docker | [Official Site](https://nodejs.org/) |
+| **npm** | v11+ (comes with Node.js) | Optional: local package management and tests | Included with Node.js |
+| **Git** | v2.30+ | Optional: clone and version control; ZIP setup does not need it | [Official Site](https://git-scm.com/) |
 > 💡 **Package Manager**: This project uses **npm inside Docker**.
 > 
 > - **npm**: The only supported package manager; use the committed `nuxt/package-lock.json`
@@ -144,11 +145,11 @@ Run these to verify your setup:
 docker --version
 docker compose version
 
-# Check Node.js & package manager
+# Optional: check Node.js & package manager
 node --version
 npm --version
 
-# Check Git
+# Optional: check Git
 git --version
 
 # Use Node.js version from .nvmrc (optional)
@@ -370,7 +371,7 @@ docker compose up -d
 
 ### 🆘 Need More Help?
 
-- Report issues via [Issues](../../issues)
+- Report issues via [GitHub Issues](https://github.com/hane-jp/nuxt-wordpress-docker/issues)
 - [WordPress REST API Documentation](https://developer.wordpress.org/rest-api/)
 - [Nuxt 4 Documentation](https://nuxt.com/)
 
@@ -439,6 +440,8 @@ Made with ❤️ for WordPress & Nuxt developers
 ## 🚀 Nuxt ✕ WordPress 開発環境スターター
 
 > Docker を使って **Nuxt 4（フロントエンド）** と **WordPress（CMS/API）** を連携できる本番対応のスターターテンプレートです。
+
+> **DockerやGitHubが初めての方へ：** [初学者向け補足マニュアル](docs/README.md)から始められます。ZIP版で試すだけなら、GitHubアカウントもGitも必要ありません。
 
 ---
 
@@ -536,14 +539,14 @@ Made with ❤️ for WordPress & Nuxt developers
 | **ディスク容量** | 5GB の空き | 10GB以上 |
 | **インターネット** | Dockerイメージ用に必要 | 安定した接続 |
 
-### 🔧 必須ツール
+### 🔧 使用するツール
 
 | ツール | バージョン | 用途 | インストール |
 |--------|------------|------|--------------|
 | **Docker Desktop** | v4.0以上 | コンテナ実行環境 | [公式サイト](https://www.docker.com/products/docker-desktop/) |
-| **Node.js** | v24 LTS | Nuxt開発環境 | [公式サイト](https://nodejs.org/) |
-| **npm** | v11以上（Node.jsに含まれる） | パッケージ管理 | Node.jsに含まれる |
-| **Git** | v2.30以上 | バージョン管理 | [公式サイト](https://git-scm.com/) |
+| **Node.js** | v24 LTS | 任意：Docker外でNuxtを動かす場合 | [公式サイト](https://nodejs.org/) |
+| **npm** | v11以上（Node.jsに含まれる） | 任意：ローカルでのパッケージ管理・テスト | Node.jsに含まれる |
+| **Git** | v2.30以上 | 任意：クローンと履歴管理。ZIP版では不要 | [公式サイト](https://git-scm.com/) |
 > 💡 **パッケージマネージャー**: このプロジェクトは **Docker 内で npm を使用** します。
 > 
 > - **npm**: 唯一の対応パッケージマネージャー。コミット済みの `nuxt/package-lock.json` を使用
@@ -577,11 +580,11 @@ Made with ❤️ for WordPress & Nuxt developers
 docker --version
 docker compose version
 
-# Node.js & パッケージマネージャー確認
+# 任意：Node.js & パッケージマネージャー確認
 node --version
 npm --version
 
-# Git確認
+# 任意：Git確認
 git --version
 
 # .nvmrcのNode.jsバージョンを使用（オプション）
@@ -803,7 +806,7 @@ docker compose up -d
 
 ### 🆘 さらにサポートが必要な場合
 
-- [Issues](../../issues) で質問・バグ報告
+- [GitHub Issues](https://github.com/hane-jp/nuxt-wordpress-docker/issues) で質問・バグ報告
 - [WordPress REST API 公式ドキュメント](https://developer.wordpress.org/rest-api/)
 - [Nuxt 4 公式ドキュメント](https://nuxt.com/)
 
