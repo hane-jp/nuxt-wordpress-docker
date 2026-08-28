@@ -1,6 +1,8 @@
 
 # 🚀 Nuxt ✕ WordPress Development Starter
 
+**Language:** English | [日本語](#-日本語版)
+
 > A production-ready starter template for integrating **Nuxt 4 (Frontend)** and **WordPress (CMS/API)** using Docker.
 
 
