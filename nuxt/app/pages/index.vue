@@ -4,7 +4,7 @@ import type { PostSummary } from '#shared/types/post'
 const config = useRuntimeConfig()
 const { data: posts, error, status } = await useFetch<PostSummary[]>('/api/posts')
 
-useSeoMeta({
+usePageSeo({
   title: 'Nuxt × WordPress Starter',
   description: 'NuxtとWordPress REST APIをDockerで連携するスタータープロジェクトです。'
 })

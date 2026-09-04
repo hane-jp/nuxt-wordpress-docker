@@ -1,5 +1,9 @@
 <script setup lang="ts">
-useSeoMeta({ title: 'User Guide | Nuxt × WordPress Starter', description: 'Learn how to set up, publish, and customize the starter.' })
+usePageSeo({
+  title: 'User Guide | Nuxt × WordPress Starter',
+  description: 'Learn how to set up, publish, and customize the starter.',
+  locale: 'en_US'
+})
 useHead({ htmlAttrs: { lang: 'en' } })
 const config = useRuntimeConfig()
 </script>
