@@ -2,7 +2,10 @@
 import type { PostSummary } from '#shared/types/post'
 
 const { data: posts, error, status, refresh } = await useFetch<PostSummary[]>('/api/posts')
-useSeoMeta({ title: '投稿一覧 | Nuxt × WordPress Starter' })
+usePageSeo({
+  title: '投稿一覧 | Nuxt × WordPress Starter',
+  description: 'WordPress REST APIから取得した公開済みの投稿一覧です。'
+})
 </script>
 
 <template>

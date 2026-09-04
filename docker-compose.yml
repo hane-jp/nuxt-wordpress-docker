@@ -56,6 +56,7 @@ services:
     environment:
       NUXT_WP_API_BASE: http://wordpress/wp-json
       NUXT_PUBLIC_WP_API_BASE: ${NUXT_PUBLIC_WP_API_BASE}
+      NUXT_PUBLIC_SITE_URL: ${NUXT_PUBLIC_SITE_URL:-http://localhost:3000}
     depends_on:
       wordpress:
         condition: service_healthy

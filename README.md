@@ -246,9 +246,14 @@ MYSQL_ROOT_PASSWORD=rootpass    # Root password
 
 # WordPress API endpoint
 NUXT_PUBLIC_WP_API_BASE=http://localhost:8080/wp-json
+
+# Public URL used in canonical links, OGP, robots.txt, and sitemap.xml
+NUXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
 > 🔒 **Security Warning**: Use strong passwords in production!
+>
+> 🌐 **SEO**: Before deployment, set `NUXT_PUBLIC_SITE_URL` to the public origin, such as `https://example.com` (without a trailing slash). Leaving `localhost` in production generates incorrect canonical and social sharing URLs.
 
 ---
 
@@ -679,9 +684,14 @@ MYSQL_ROOT_PASSWORD=rootpass    # root パスワード
 
 # WordPress API エンドポイント
 NUXT_PUBLIC_WP_API_BASE=http://localhost:8080/wp-json
+
+# canonical・OGP・robots.txt・sitemap.xmlで使う公開URL
+NUXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
 > 🔒 **セキュリティ注意**：本番環境では必ず強固なパスワードに変更してください！
+>
+> 🌐 **SEO設定**：デプロイ時は `NUXT_PUBLIC_SITE_URL` を `https://example.com` のような公開URL（末尾の `/` なし）へ変更してください。`localhost` のまま公開するとcanonicalやSNS共有URLが正しく生成されません。
 
 ---
 
