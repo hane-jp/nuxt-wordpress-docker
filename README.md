@@ -272,6 +272,8 @@ NUXT_PUBLIC_SITE_URL=http://localhost:3000
 Nuxt proxies requests through its server API (`/api/posts`) to avoid browser CORS issues and to use the Docker-internal WordPress hostname during SSR. The UI remains usable before WordPress is initialized.
 Both pretty REST URLs and WordPress's default plain-permalink REST URL are supported automatically.
 
+Japanese and other Unicode characters are supported in post slugs, and the starter generates encoded URLs for them automatically. For production sites, lowercase ASCII letters, numbers, and hyphens are recommended because they are easier to handle when copying URLs, reviewing analytics and logs, and integrating with external services.
+
 ### WordPress → Nuxt Data Retrieval
 
 Uses WordPress **REST API** to fetch data:
@@ -709,6 +711,8 @@ NUXT_PUBLIC_SITE_URL=http://localhost:3000
 
 NuxtサーバーのAPI（`/api/posts`）を経由することで、ブラウザのCORS問題を避け、SSR時にはDocker内部のWordPressホスト名を利用します。WordPressの初期設定前でも画面は安全に表示されます。
 通常のREST URLと、WordPressの初期パーマリンク状態で使われるクエリ形式のREST URLの両方へ自動対応します。
+
+投稿スラッグには日本語などのUnicode文字も利用でき、スターター側で自動的にエンコードされたURLを生成します。ただし本番運用では、URLのコピー・共有、アクセス解析やログの確認、外部サービスとの連携で扱いやすいよう、半角英小文字・数字・ハイフンの使用を推奨します。
 
 ### WordPress → Nuxt へのデータ取得
 
