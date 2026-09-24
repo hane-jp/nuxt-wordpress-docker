@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import type { PostSummary } from '#shared/types/post'
+import { postPath } from '#shared/utils/post-path'
 
 defineProps<{ post: PostSummary }>()
 </script>
 
 <template>
   <article class="post-card">
-    <NuxtLink :to="`/posts/${post.slug}`" class="post-card__link">
+    <NuxtLink :to="postPath(post.slug)" class="post-card__link">
       <div v-if="post.imageUrl" class="post-card__media">
         <img :src="post.imageUrl" :alt="post.imageAlt" loading="lazy">
       </div>

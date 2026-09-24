@@ -1,4 +1,5 @@
 import { fetchWordPressPosts } from '../utils/wordpress'
+import { postPath } from '../../shared/utils/post-path'
 
 const escapeXml = (value: string) => value
   .replaceAll('&', '&amp;')
@@ -27,7 +28,7 @@ export default defineEventHandler(async (event) => {
   try {
     const posts = await fetchWordPressPosts(config.wpApiBase, { per_page: 100 })
     urls.push(...posts.map(post => ({
-      loc: `${siteUrl}/posts/${encodeURIComponent(post.slug)}`,
+      loc: `${siteUrl}${postPath(post.slug)}`,
       lastmod: post.date,
       changefreq: 'weekly',
       priority: '0.7'
