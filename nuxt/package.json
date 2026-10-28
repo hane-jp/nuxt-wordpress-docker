@@ -15,7 +15,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "nuxt": "^4.6.2",
+    "nuxt": "^4.6.3",
     "ofetch": "^1.5.1",
     "sanitize-html": "^2.18.1"
   },
