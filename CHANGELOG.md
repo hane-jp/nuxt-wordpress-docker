@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+### Security and maintenance / セキュリティ・保守
+
+- Update node-forge from 1.4.0 to 1.4.1 in the committed lockfile to include the upstream RSA signature verification fix ([#13](https://github.com/hane-jp/nuxt-wordpress-docker/pull/13), [GHSA-2g46-22mc-6gwp](https://github.com/digitalbazaar/forge/security/advisories/GHSA-2g46-22mc-6gwp)).
+- node-forgeを1.4.0から1.4.1へ更新しました。変更はlockfileの該当エントリのみです。Node.jsの対応範囲とアプリのAPIは変わりません。更新したソースで `cd nuxt && npm ci` を実行してください。
+- brace-expansion 2.1.7 / 5.0.12 were already included in v1.1.1; they are not new changes in #13. これらのbrace-expansion修正版はv1.1.1時点で含まれています。
+
+### Known issues / 残る課題
+
+- [#15](https://github.com/hane-jp/nuxt-wordpress-docker/pull/15) adds glob/minimatch investigation notes and synthetic compatibility checks only; it does not update dependencies. [GHSA-3g3m-2fjr-6pw4](https://github.com/advisories/GHSA-3g3m-2fjr-6pw4) and [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249) remain unresolved.
+- glob/minimatchは調査・検証追加のみで、対象2件のGHSAは未解決です。node-forgeの更新は全依存の脆弱性解消を意味しません。詳細と再実行手順は[調査記録](docs/security/2026-11-01-glob-minimatch.md)を参照してください。
+
 ## 1.1.1
 
 ### Compatibility / 互換性の注意
