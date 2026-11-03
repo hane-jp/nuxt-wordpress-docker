@@ -14,19 +14,24 @@ const require = createRequire(resolve('package.json'))
 const from = name => createRequire(require.resolve(name))
 const sorted = values => [...values].sort()
 const glob13 = from('@vercel/nft')('glob')
-const glob10 = from('archiver-utils')('glob')
+// Nitro 2.13.6 requires archiver 8, which removes archiver-utils entirely.
+// Keep checking that legacy path only when the installed tree still contains it.
+let archiveUtils
+try { archiveUtils = from('archiver-utils') } catch (error) {
+  if (error.code !== 'MODULE_NOT_FOUND') throw error
+}
 const matchers = [
   ['root', require('minimatch')],
-  ['archiver-utils', from('archiver-utils')('minimatch')],
+  ...(archiveUtils ? [['archiver-utils', archiveUtils('minimatch')]] : []),
   ['readdir-glob', from('readdir-glob')('minimatch')],
 ]
 const candidate = process.argv[2] && createRequire(join(resolve(process.argv[2]), 'package.json'))
 const report = { candidate: Boolean(candidate), versions: {
   nft: require('@vercel/nft/package.json').version,
   glob: from('@vercel/nft')('glob/package.json').version,
-  nestedGlob: from('archiver-utils')('glob/package.json').version,
+  nestedGlob: archiveUtils ? archiveUtils('glob/package.json').version : null,
   minimatch: require('minimatch/package.json').version,
-  nestedMinimatch: from('archiver-utils')('minimatch/package.json').version,
+  nestedMinimatch: archiveUtils ? archiveUtils('minimatch/package.json').version : null,
   legacyMinimatch: from('readdir-glob')('minimatch/package.json').version,
   ...(candidate && { candidateGlob: candidate('glob/package.json').version,
     candidateMinimatch: candidate('minimatch/package.json').version }),
@@ -40,7 +45,7 @@ try {
     await writeFile(join(fixture, name), name.endsWith('.json') ? '{}' : 'fixture')
   }
   // API options used by NFT and archiver-utils, plus a bounded cancellation check.
-  const globs = [['nft', glob13], ['archiver-utils', glob10]]
+  const globs = [['nft', glob13], ...(archiveUtils ? [['archiver-utils', archiveUtils('glob')]] : [])]
   if (candidate) globs.push(['candidate', candidate('glob')])
   for (const [name, glob] of globs) {
     for (const [pattern, options, expected] of [
@@ -78,9 +83,11 @@ try {
     report.matchers.push({ name, moduleType: typeof module, classType: typeof module.Minimatch,
       hasFirstPhase: typeof module.Minimatch.prototype.firstPhasePreProcess === 'function' })
   }
-  const utils = require('archiver-utils')
-  assert.deepEqual(sorted(utils.file.expand({ cwd: fixture, filter: 'isFile' },
-    ['src/**/*.js', '!**/omit.js'])), ['src/main.js', 'src/nested/part.js'])
+  if (archiveUtils) {
+    const utils = require('archiver-utils')
+    assert.deepEqual(sorted(utils.file.expand({ cwd: fixture, filter: 'isFile' },
+      ['src/**/*.js', '!**/omit.js'])), ['src/main.js', 'src/nested/part.js'])
+  }
 
   const walk = require('readdir-glob')(fixture, { pattern: '**/*.json', dot: true, nodir: true })
   const found = []
@@ -96,7 +103,10 @@ try {
   for (const name of ['entry.cjs', 'assets/a.json', 'assets/b.json']) assert.ok(trace.fileList.has(name), name)
 
   // Verify actual ZIP central-directory names, not just successful finalization.
-  const archive = require('archiver')('zip', { store: true })
+  const archiver = await import('archiver')
+  const archive = archiver.ZipArchive
+    ? new archiver.ZipArchive({ store: true })
+    : archiver.default('zip', { store: true })
   const chunks = []
   archive.on('data', data => chunks.push(data))
   const ended = once(archive, 'end')

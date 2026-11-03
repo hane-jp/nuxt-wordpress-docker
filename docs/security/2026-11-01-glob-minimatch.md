@@ -2,6 +2,8 @@
 
 Refs #14。この変更は調査文書と小さな互換性テストのみ。依存とlockを更新しておらず、対象GHSAは未解消。アラートdismissや修正済み宣言はしない。
 
+2026-11-03追記（#17）: 以下は11月1日の基点を記録した調査です。Nuxt 4.6.4が要求するNitro 2.13.6ではarchiver 8 / readdir-glob 3が必須になり、archiver-utilsとそのglob/minimatch経路が削除されます。検証スクリプトはこの構成でも実NFT・ZIP収録名を検査し、削除済み経路の版はnullを表示します。残るglob 13 / minimatch 10の対象GHSAは未解消で、major overrideは導入していません。
+
 - 起点: `83478482da056fcea4e186187c9c5796b079f09b`（main）。元作業領域と分離したclone。
 - lock: `nuxt/package-lock.json`、SHA-256 `1a8f129df2eb13b2a57451e7d9a538f16579906a23472aadf4f7b3bcade3687b`。基準commitとbyte一致。
 - 検証環境: macOS arm64 / Node24.22.1。空HOME、空npm設定、合成入力。秘密、実CMS/DB、Botは不使用。
