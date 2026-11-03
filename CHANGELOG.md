@@ -4,6 +4,8 @@
 
 ### Security and maintenance / セキュリティ・保守
 
+- Update Nuxt to 4.6.4, with the required Nitro 2.13.6 and unrouting 0.3.2 security fixes. The lockfile also includes the corresponding builder and required transitive dependency changes; unrelated dependencies retain their previous resolved versions. See [Nuxt 4.6.4](https://github.com/nuxt/nuxt/releases/tag/v4.6.4) and [Nitro GHSA-39r7-wfcx-99xg](https://github.com/nitrojs/nitro/security/advisories/GHSA-39r7-wfcx-99xg).
+- Nuxt 4.6.4と対応builder、必須の推移依存へ限定更新しました。開発時のworkspace境界・経路ルール・サーバー応答キャッシュ等の公式修正を取り込みます。更新したソースで `cd nuxt && npm ci` を実行してください。Node.js・WordPress・PHP・DBの対応範囲は変わりません。
 - Update node-forge from 1.4.0 to 1.4.1 in the committed lockfile to include the upstream RSA signature verification fix ([#13](https://github.com/hane-jp/nuxt-wordpress-docker/pull/13), [GHSA-2g46-22mc-6gwp](https://github.com/digitalbazaar/forge/security/advisories/GHSA-2g46-22mc-6gwp)).
 - node-forgeを1.4.0から1.4.1へ更新しました。変更はlockfileの該当エントリのみです。Node.jsの対応範囲とアプリのAPIは変わりません。更新したソースで `cd nuxt && npm ci` を実行してください。
 - brace-expansion 2.1.7 / 5.0.12 were already included in v1.1.1; they are not new changes in #13. これらのbrace-expansion修正版はv1.1.1時点で含まれています。
